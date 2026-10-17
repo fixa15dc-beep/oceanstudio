@@ -763,14 +763,29 @@ async def seed_content():
     await db.products.insert_many(products)
 
 
+async def cleanup_stale_uploads():
+    """Remove partial uploads older than 24h (never completed)."""
+    cutoff = now() - timedelta(hours=24)
+    stale = await db.uploads.find({"created_at": {"$lt": cutoff}}).to_list(1000)
+    for up in stale:
+        p = UPLOAD_TMP_DIR / up["id"]
+        if p.exists():
+            p.unlink()
+    if stale:
+        await db.uploads.delete_many({"id": {"$in": [u["id"] for u in stale]}})
+
+
 @app.on_event("startup")
 async def startup():
     await db.users.create_index("email", unique=True)
     await db.products.create_index("id", unique=True)
     await db.grants.create_index([("email", 1), ("product_id", 1)], unique=True)
     await db.login_attempts.create_index("identifier")
+    await db.files.create_index("id", unique=True)
+    await db.uploads.create_index("id", unique=True)
     await seed_admin()
     await seed_content()
+    await cleanup_stale_uploads()
 
 
 @app.on_event("shutdown")

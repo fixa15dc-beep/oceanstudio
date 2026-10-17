@@ -16,7 +16,16 @@
 5. Painel admin: CRUD de produtos, editor de cursos (módulos/aulas), setar/remover acesso por e-mail (cria conta com senha temporária se o e-mail for novo), link do Discord configurável.
 6. Conteúdo placeholder semeado no startup (5 produtos + settings), trocável pelo admin sem código.
 
-## Arquitetura entregue (2026-10-17)
+## Arquitetura entregue
+
+### Iteração 3 (2026-10-17) — Logo real, uploads 2 GB, site editável, redesign minimalista
+- Assets reais do cliente: `/img/logo.png` (onda circular, fundo transparente) e `/img/wordmark.png` ("Ocean"), `favicon.png`. Usados em nav, rodapé, hero, painel, login.
+- Uploads em partes (`/api/admin/uploads/init|chunk|complete`, chunks de 4 MB, até 2 GB, JPG/PNG/WEBP/GIF/MP4/WEBM/MOV), salvos em `/app/backend/uploads` (gitignored), servidos por `GET /api/uploads/{name}` com suporte a HTTP Range (seek no vídeo). Registro em `db.files`; limpeza de parciais >24h no startup. NOTA: armazenamento em disco local — em produção verificar persistência do volume.
+- Conteúdo do site 100% editável: `GET /api/site` (defaults em `backend/site_content.py` + overrides em `settings.key=site`), `PUT /api/admin/site`, `POST /api/admin/site/reset`. Aba "Site" no painel edita marca, menu, hero, letreiro, catálogo (blocos), carros (galeria), HL (vídeos enviados ou YouTube), facs (textos) e rodapé. Aba "Arquivos" = biblioteca de mídia (upload múltiplo, copiar link, apagar). Campos de imagem em Produtos/Facs/Aulas aceitam upload (`MediaField`/`MediaListField`).
+- Redesign minimalista/editorial: Manrope + JetBrains Mono, fundo #06091A, grão sutil, hairlines, labels numeradas (01 — Catálogo), hero com reveal linha a linha + parallax, Lenis smooth scroll, framer-motion reveals, marquee lento, galeria de carros com crossfade, seção HL com player nativo, facs em lista editorial.
+- Testado (testing_agent iteração 1): 17/17 backend, 100% fluxos frontend (desktop + mobile).
+
+### Iterações anteriores
 - Réplica do portfólio (2026-10-17): Home idêntica à referência — hero (capa real ocean-CAPA, wordmark "Ocean" com redemoinho, "TODOS OS DIREITOS RESEVADOS ©"), Catálogo com 3 cards reais, Carros = galeria Maybach (8 fotos + miniaturas clicáveis + selo "Preto fosco"), Facs (CRUD no painel: nome + descrição + fotos por URL; empty state idêntico), rodapé centrado. Assets do cliente baixados para /img/ (hero-capa, cat-roupas, cat-hl, maybach-1..8). Fonte Poppins; navbar: Catálogo, Carros, Facs + pílula "Painel".
 - Redesign (2026-10-17): tema dark na identidade da foto de referência (bg #050B18, cards #0A1220 arredondados, botões pill, fontes Sora + Outfit), logo circular da onda recriada em SVG (nav, rodapé, hero "Ocean" e favicon), banner cinematográfico gerado no hero, seção Catálogo com cards Roupas/Carros/HL.
 - Backend FastAPI (server.py): auth JWT (access 60min + refresh 7d, cookies SameSite=none/secure), verificação de Origin em mutações, MongoDB (users, products, grants, settings, login_attempts, facs), índices únicos, seed de admin + produtos placeholder.
@@ -27,10 +36,10 @@
 - Playwright: home desktop/mobile sem overflow, menu mobile, login aluno → perfil → player de curso funcionando, login admin → painel (produtos, cursos, acessos).
 
 ## Backlog
-- P0: (nenhum — MVP completo)
-- P1 (Fase 2): fotos/nomes/preços reais; galeria de HLs; depoimentos; FAQ; progresso de aulas concluídas.
-- P2 (Fase 3): SEO/preview de compartilhamento; downloads de materiais; pagamento automático online.
+- P0: (nenhum)
+- P1 (Fase 2): depoimentos; FAQ; progresso de aulas concluídas; edição de facs já publicadas (hoje só criar/remover).
+- P2 (Fase 3): SEO/preview de compartilhamento; downloads de materiais; pagamento automático online; thumbnails automáticas para vídeos enviados.
 
 ## Próximos passos
-1. Dono troca placeholders pelos produtos reais no painel (/admin) e atualiza o link do Discord em Configurações.
-2. Conteúdo real das aulas via aba "Conteúdo dos Cursos" (vídeo ou texto).
+1. Dono sobe o banner/fotos/HLs reais pela aba "Arquivos" e ajusta textos pela aba "Site".
+2. Conteúdo real das aulas via aba "Conteúdo dos Cursos" (vídeo enviado ou link).
