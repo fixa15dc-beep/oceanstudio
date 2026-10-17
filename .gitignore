@@ -87,3 +87,9 @@ android-sdk/
 # Uploaded media
 backend/uploads/
 backend/uploads_tmp/
+.env
+.env.*
+*.env
+credentials.json
+*.key
+.credentials
