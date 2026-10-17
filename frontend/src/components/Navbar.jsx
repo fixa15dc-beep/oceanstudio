@@ -1,17 +1,14 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, User } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { WaveLogo } from "./WaveLogo";
 import { useAuth } from "../context/AuthContext";
 
-const DISCORD_FALLBACK = "https://discord.gg/oceanstudio";
-
-export default function Navbar({ discordUrl }) {
+export default function Navbar() {
     const [open, setOpen] = useState(false);
     const { pathname } = useLocation();
     const navigate = useNavigate();
     const { user } = useAuth();
-    const discord = discordUrl || DISCORD_FALLBACK;
 
     const goSection = (id) => {
         setOpen(false);
@@ -27,7 +24,7 @@ export default function Navbar({ discordUrl }) {
     };
 
     return (
-        <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#050B18]/85 backdrop-blur-xl">
+        <header className="fixed inset-x-0 top-0 z-50 border-b border-white/5 bg-[#050B18]/90 backdrop-blur-xl">
             <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:px-8">
                 <Link to="/" data-testid="nav-logo" className="shrink-0">
                     <WaveLogo />
@@ -35,53 +32,33 @@ export default function Navbar({ discordUrl }) {
 
                 <nav className="hidden items-center gap-8 md:flex">
                     <button
-                        data-testid="nav-vitrine"
+                        data-testid="nav-catalogo"
                         onClick={() => goSection("catalogo")}
-                        className="text-sm font-medium text-white/70 transition-colors hover:text-white"
+                        className="text-sm text-white/75 transition-colors hover:text-white"
                     >
                         Catálogo
                     </button>
                     <button
                         data-testid="nav-carros"
                         onClick={() => goSection("carros")}
-                        className="text-sm font-medium text-white/70 transition-colors hover:text-white"
+                        className="text-sm text-white/75 transition-colors hover:text-white"
                     >
                         Carros
                     </button>
                     <button
-                        data-testid="nav-sobre"
-                        onClick={() => goSection("sobre")}
-                        className="text-sm font-medium text-white/70 transition-colors hover:text-white"
+                        data-testid="nav-facs"
+                        onClick={() => goSection("facs")}
+                        className="text-sm text-white/75 transition-colors hover:text-white"
                     >
                         Facs
                     </button>
-                    <a
-                        data-testid="nav-discord"
-                        href={discord}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm font-medium text-white/70 transition-colors hover:text-white"
+                    <Link
+                        data-testid="nav-painel"
+                        to={user?.role === "student" ? "/perfil" : "/admin"}
+                        className="rounded-full bg-white px-5 py-2 text-sm font-medium text-[#050B18] transition-transform hover:scale-[1.03]"
                     >
-                        Discord
-                    </a>
-                    {user ? (
-                        <Link
-                            data-testid="nav-profile-link"
-                            to={user.role === "admin" ? "/admin" : "/perfil"}
-                            className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2 text-sm font-semibold text-[#050B18] transition-transform hover:scale-[1.03]"
-                        >
-                            <User className="h-3.5 w-3.5" />
-                            {user.role === "admin" ? "Painel" : "Meu Perfil"}
-                        </Link>
-                    ) : (
-                        <Link
-                            data-testid="nav-entrar"
-                            to="/entrar"
-                            className="rounded-full bg-white px-5 py-2 text-sm font-semibold text-[#050B18] transition-transform hover:scale-[1.03]"
-                        >
-                            Entrar
-                        </Link>
-                    )}
+                        {user?.role === "student" ? "Meu Perfil" : "Painel"}
+                    </Link>
                 </nav>
 
                 <button
@@ -95,10 +72,10 @@ export default function Navbar({ discordUrl }) {
             </div>
 
             {open && (
-                <div className="border-t border-white/10 bg-[#050B18] px-5 pb-6 pt-2 md:hidden">
+                <div className="border-t border-white/5 bg-[#050B18] px-5 pb-6 pt-2 md:hidden">
                     <div className="flex flex-col gap-1">
                         <button
-                            data-testid="nav-mobile-vitrine"
+                            data-testid="nav-mobile-catalogo"
                             onClick={() => goSection("catalogo")}
                             className="rounded px-2 py-3 text-left text-sm text-white/80"
                         >
@@ -112,31 +89,20 @@ export default function Navbar({ discordUrl }) {
                             Carros
                         </button>
                         <button
-                            data-testid="nav-mobile-sobre"
-                            onClick={() => goSection("sobre")}
+                            data-testid="nav-mobile-facs"
+                            onClick={() => goSection("facs")}
                             className="rounded px-2 py-3 text-left text-sm text-white/80"
                         >
                             Facs
                         </button>
-                        {user ? (
-                            <Link
-                                data-testid="nav-mobile-profile"
-                                to={user.role === "admin" ? "/admin" : "/perfil"}
-                                onClick={() => setOpen(false)}
-                                className="rounded px-2 py-3 text-left text-sm text-white/80"
-                            >
-                                {user.role === "admin" ? "Painel" : "Meu Perfil"}
-                            </Link>
-                        ) : (
-                            <Link
-                                data-testid="nav-mobile-entrar"
-                                to="/entrar"
-                                onClick={() => setOpen(false)}
-                                className="rounded px-2 py-3 text-left text-sm text-white/80"
-                            >
-                                Entrar
-                            </Link>
-                        )}
+                        <Link
+                            data-testid="nav-mobile-painel"
+                            to={user?.role === "student" ? "/perfil" : "/admin"}
+                            onClick={() => setOpen(false)}
+                            className="rounded px-2 py-3 text-left text-sm text-white/80"
+                        >
+                            {user?.role === "student" ? "Meu Perfil" : "Painel"}
+                        </Link>
                     </div>
                 </div>
             )}

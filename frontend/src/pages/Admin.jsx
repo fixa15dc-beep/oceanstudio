@@ -7,6 +7,7 @@ import AdminProducts from "./admin/AdminProducts";
 import AdminCourses from "./admin/AdminCourses";
 import AdminAccess from "./admin/AdminAccess";
 import AdminSettings from "./admin/AdminSettings";
+import AdminFacs from "./admin/AdminFacs";
 
 export default function Admin() {
     const { user, logout } = useAuth();
@@ -54,6 +55,7 @@ export default function Admin() {
                         {[
                             { v: "produtos", label: "Produtos" },
                             { v: "cursos", label: "Conteúdo dos Cursos" },
+                            { v: "facs", label: "Facs" },
                             { v: "acessos", label: "Acessos dos Clientes" },
                             { v: "config", label: "Configurações" },
                         ].map((t) => (
@@ -72,6 +74,9 @@ export default function Admin() {
                     </TabsContent>
                     <TabsContent value="cursos" className="mt-8">
                         <AdminCourses />
+                    </TabsContent>
+                    <TabsContent value="facs" className="mt-8">
+                        <AdminFacs />
                     </TabsContent>
                     <TabsContent value="acessos" className="mt-8">
                         <AdminAccess />

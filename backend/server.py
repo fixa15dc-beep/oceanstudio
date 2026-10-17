@@ -185,6 +185,12 @@ class SettingsIn(BaseModel):
     discord_url: str
 
 
+class FacIn(BaseModel):
+    name: str
+    description: str = ""
+    images: List[str] = []
+
+
 # ---------------- Public ----------------
 
 @api_router.get("/")
@@ -209,6 +215,12 @@ async def get_settings():
     if not s:
         return {"discord_url": ""}
     return {"discord_url": s.get("discord_url", "")}
+
+
+@api_router.get("/facs")
+async def list_facs():
+    docs = await db.facs.find({}).sort("created_at", -1).to_list(200)
+    return [clean_doc(d) for d in docs]
 
 
 # ---------------- Auth ----------------
@@ -456,6 +468,23 @@ async def admin_create_grant(body: GrantIn, request: Request, user: dict = Depen
 async def admin_delete_grant(grant_id: str, request: Request, user: dict = Depends(require_admin)):
     check_origin(request)
     await db.grants.delete_one({"id": grant_id})
+    return {"ok": True}
+
+
+@api_router.post("/admin/facs")
+async def admin_create_fac(body: FacIn, request: Request, user: dict = Depends(require_admin)):
+    check_origin(request)
+    doc = body.model_dump()
+    doc["id"] = str(uuid.uuid4())
+    doc["created_at"] = now()
+    await db.facs.insert_one(doc)
+    return clean_doc(await db.facs.find_one({"id": doc["id"]}))
+
+
+@api_router.delete("/admin/facs/{fac_id}")
+async def admin_delete_fac(fac_id: str, request: Request, user: dict = Depends(require_admin)):
+    check_origin(request)
+    await db.facs.delete_one({"id": fac_id})
     return {"ok": True}
 
 

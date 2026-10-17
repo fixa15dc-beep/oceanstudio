@@ -1,7 +1,7 @@
-# PRD — Ocean Studio (Vitrine + Área de Alunos, FiveM)
+# PRD — Ocean Studio (Portfólio de Roupas, Carros e HL para FiveM)
 
 ## Problema original
-"quero criar um site portifolio/site pra colocar o curso de hl, roupas e carros pra fivem" — vitrine dos cursos/packs com preço e compra fechada no Discord, área de alunos com acesso setado pelo dono.
+"quero criar um site portifolio/site pra colocar o curso de hl, roupas e carros pra fivem" — evolução: o cliente aprovou a réplica EXATA do portfólio de referência https://faction-folio.lovable.app/#catalogo (2026-10-17): hero com capa real, Catálogo (Roupas/Carros/HL), galeria do Maybach S-Class com miniaturas, seção Facs publicada pelo painel e rodapé centrado. Área de alunos (cursos) segue existindo em rotas próprias.
 
 ## Personas
 - Visitante: jogador/criador de conteúdo FiveM GTA RP BR que quer aprender a editar HLs ou comprar packs.
@@ -17,8 +17,9 @@
 6. Conteúdo placeholder semeado no startup (5 produtos + settings), trocável pelo admin sem código.
 
 ## Arquitetura entregue (2026-10-17)
+- Réplica do portfólio (2026-10-17): Home idêntica à referência — hero (capa real ocean-CAPA, wordmark "Ocean" com redemoinho, "TODOS OS DIREITOS RESEVADOS ©"), Catálogo com 3 cards reais, Carros = galeria Maybach (8 fotos + miniaturas clicáveis + selo "Preto fosco"), Facs (CRUD no painel: nome + descrição + fotos por URL; empty state idêntico), rodapé centrado. Assets do cliente baixados para /img/ (hero-capa, cat-roupas, cat-hl, maybach-1..8). Fonte Poppins; navbar: Catálogo, Carros, Facs + pílula "Painel".
 - Redesign (2026-10-17): tema dark na identidade da foto de referência (bg #050B18, cards #0A1220 arredondados, botões pill, fontes Sora + Outfit), logo circular da onda recriada em SVG (nav, rodapé, hero "Ocean" e favicon), banner cinematográfico gerado no hero, seção Catálogo com cards Roupas/Carros/HL.
-- Backend FastAPI (server.py): auth JWT (access 60min + refresh 7d, cookies SameSite=none/secure), verificação de Origin em mutações, MongoDB (users, products, grants, settings, login_attempts), índices únicos, seed de admin + produtos placeholder.
+- Backend FastAPI (server.py): auth JWT (access 60min + refresh 7d, cookies SameSite=none/secure), verificação de Origin em mutações, MongoDB (users, products, grants, settings, login_attempts, facs), índices únicos, seed de admin + produtos placeholder.
 - Frontend React (CRA): Home (hero cinético, marquee, destaque HL, carros, roupas, como funciona, sobre/Discord), /entrar, /cadastro, /perfil, /curso/:pid, /admin (tabs Produtos, Cursos, Acessos, Configurações), ErrorBoundary, ScrollToTop, sonner toasts, data-testid em toda interação.
 
 ## Verificado (2026-10-17)

@@ -16,7 +16,7 @@ html {
 
 body {
     margin: 0;
-    font-family: "Outfit", sans-serif;
+    font-family: "Poppins", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background: #050b18;
@@ -24,7 +24,7 @@ body {
 }
 
 .font-display {
-    font-family: "Sora", sans-serif;
+    font-family: "Poppins", sans-serif;
 }
 
 ::selection {
