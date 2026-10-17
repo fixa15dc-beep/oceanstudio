@@ -30,8 +30,8 @@ export default function AdminSettings() {
 
     return (
         <div className="max-w-2xl" data-testid="admin-settings-panel">
-            <h2 className="font-display text-2xl font-semibold text-[#0A192F]">Configurações da vitrine</h2>
-            <div className="mt-6 space-y-1.5 border border-[#0A192F]/10 bg-white p-8">
+            <h2 className="font-display text-2xl font-bold text-white">Configurações da vitrine</h2>
+            <div className="mt-6 space-y-1.5 rounded-2xl border border-white/10 bg-[#0A1220] p-8">
                 <Label>Link do servidor no Discord</Label>
                 <Input
                     data-testid="admin-settings-discord"
@@ -39,14 +39,14 @@ export default function AdminSettings() {
                     onChange={(e) => setDiscordUrl(e.target.value)}
                     placeholder="https://discord.gg/seu-convite"
                 />
-                <p className="pt-2 text-xs font-light text-[#0F172A]/50">
+                <p className="pt-2 text-xs font-light text-white/50">
                     Este é o link usado em todos os botões "Comprar no Discord" do site.
                 </p>
                 <Button
                     data-testid="admin-settings-save"
                     onClick={save}
                     disabled={busy}
-                    className="mt-4 rounded-none bg-[#0A192F] px-8 text-xs uppercase tracking-[0.14em] hover:bg-[#0A192F]/90"
+                    className="mt-4 rounded-full bg-white px-8 text-xs uppercase tracking-[0.14em] text-[#050B18] hover:bg-white/90"
                 >
                     <Save className="mr-2 h-4 w-4" /> {busy ? "Salvando..." : "Salvar"}
                 </Button>

@@ -4,8 +4,11 @@ import { formatPrice, CATEGORY_LABEL, TYPE_LABEL } from "../api";
 export default function ProductCard({ product, discordUrl }) {
     const p = product;
     return (
-        <article className="group flex h-full flex-col" data-testid={`product-card-${p.id}`}>
-            <div className="relative aspect-[4/3] overflow-hidden bg-[#0A192F]/5">
+        <article
+            className="group flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0A1220] transition-colors duration-300 hover:border-white/25"
+            data-testid={`product-card-${p.id}`}
+        >
+            <div className="relative aspect-[4/3] overflow-hidden bg-white/5">
                 {p.image_url ? (
                     <img
                         src={p.image_url}
@@ -14,26 +17,26 @@ export default function ProductCard({ product, discordUrl }) {
                         className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                     />
                 ) : (
-                    <div className="flex h-full items-center justify-center font-display text-4xl text-[#0A192F]/20">
+                    <div className="flex h-full items-center justify-center font-display text-4xl font-bold text-white/15">
                         OS
                     </div>
                 )}
-                <span className="absolute left-4 top-4 bg-[#0A192F] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-white">
+                <span className="absolute left-4 top-4 bg-black/60 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-white backdrop-blur">
                     {TYPE_LABEL[p.type] || p.type} • {CATEGORY_LABEL[p.category] || p.category}
                 </span>
             </div>
-            <div className="flex flex-1 flex-col pt-5">
-                <h3 className="font-display text-xl font-semibold tracking-wide text-[#0A192F]">
+            <div className="flex flex-1 flex-col p-6">
+                <h3 className="font-display text-xl font-bold tracking-tight text-white">
                     {p.name}
                 </h3>
                 {p.description && (
-                    <p className="mt-2 line-clamp-2 text-sm font-light leading-relaxed text-[#0F172A]/60">
+                    <p className="mt-2 line-clamp-2 text-sm font-light leading-relaxed text-white/55">
                         {p.description}
                     </p>
                 )}
                 <div className="mt-4 flex flex-1 items-end justify-between gap-4">
                     <span
-                        className="font-display text-2xl font-semibold text-[#0A192F]"
+                        className="font-display text-2xl font-bold text-white"
                         data-testid={`product-price-${p.id}`}
                     >
                         {formatPrice(p.price)}

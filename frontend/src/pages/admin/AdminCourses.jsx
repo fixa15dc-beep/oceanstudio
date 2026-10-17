@@ -75,7 +75,7 @@ export default function AdminCourses() {
 
     if (cursos.length === 0) {
         return (
-            <p className="border border-[#0A192F]/10 bg-white p-8 text-sm text-[#0F172A]/55" data-testid="admin-courses-empty">
+            <p className="rounded-2xl border border-white/10 bg-[#0A1220] p-8 text-sm text-white/55" data-testid="admin-courses-empty">
                 Nenhum produto do tipo "Curso" ainda. Crie um produto na aba Produtos e ele aparecerá aqui.
             </p>
         );
@@ -96,10 +96,10 @@ export default function AdminCourses() {
                     </Select>
                 </div>
                 <div className="flex gap-3">
-                    <Button variant="outline" data-testid="admin-module-add" onClick={addModule} className="rounded-none border-[#0A192F]/30 text-xs uppercase tracking-[0.14em]">
+                    <Button variant="outline" data-testid="admin-module-add" onClick={addModule} className="rounded-full border-white/20 bg-transparent text-xs uppercase tracking-[0.14em] text-white hover:bg-white/10">
                         <Plus className="mr-2 h-4 w-4" /> Módulo
                     </Button>
-                    <Button data-testid="admin-course-save" onClick={save} disabled={busy} className="rounded-none bg-[#0A192F] text-xs uppercase tracking-[0.14em] hover:bg-[#0A192F]/90">
+                    <Button data-testid="admin-course-save" onClick={save} disabled={busy} className="rounded-full bg-white text-xs uppercase tracking-[0.14em] text-[#050B18] hover:bg-white/90">
                         <Save className="mr-2 h-4 w-4" /> {busy ? "Salvando..." : "Salvar conteúdo"}
                     </Button>
                 </div>
@@ -107,31 +107,31 @@ export default function AdminCourses() {
 
             <div className="mt-8 space-y-6">
                 {modules.map((mod, mi) => (
-                    <div key={mod.id} className="border border-[#0A192F]/10 bg-white p-6" data-testid={`admin-module-${mi}`}>
+                    <div key={mod.id} className="rounded-2xl border border-white/10 bg-[#0A1220] p-6" data-testid={`admin-module-${mi}`}>
                         <div className="flex items-center gap-3">
-                            <span className="font-display text-sm font-semibold tracking-[0.16em] text-[#0A192F]/40">
+                            <span className="font-display text-sm font-bold tracking-[0.16em] text-white/40">
                                 M{mi + 1}
                             </span>
                             <Input
                                 data-testid={`admin-module-title-${mi}`}
                                 value={mod.title}
                                 onChange={(e) => setModuleTitle(mi, e.target.value)}
-                                className="max-w-md border-[#0A192F]/15"
+                                className="max-w-md border-white/15"
                             />
-                            <button data-testid={`admin-module-remove-${mi}`} onClick={() => removeModule(mi)} className="p-2 text-[#0F172A]/40 hover:text-red-600" aria-label="Remover módulo">
+                            <button data-testid={`admin-module-remove-${mi}`} onClick={() => removeModule(mi)} className="p-2 text-white/40 hover:text-red-500" aria-label="Remover módulo">
                                 <Trash2 className="h-4 w-4" />
                             </button>
                         </div>
 
-                        <div className="mt-5 space-y-4 border-l-2 border-[#0A192F]/10 pl-5">
+                        <div className="mt-5 space-y-4 border-l-2 border-white/10 pl-5">
                             {mod.lessons.map((les, li) => (
-                                <div key={les.id} className="space-y-3 border border-[#0A192F]/10 bg-[#F8FAFC] p-4" data-testid={`admin-lesson-${mi}-${li}`}>
+                                <div key={les.id} className="space-y-3 rounded-xl border border-white/10 bg-white/5 p-4" data-testid={`admin-lesson-${mi}-${li}`}>
                                     <div className="flex items-center gap-3">
                                         <Input
                                             data-testid={`admin-lesson-title-${mi}-${li}`}
                                             value={les.title}
                                             onChange={(e) => updateLesson(mi, li, { title: e.target.value })}
-                                            className="border-[#0A192F]/15"
+                                            className="border-white/15"
                                             placeholder="Título da aula"
                                         />
                                         <Select data-testid={`admin-lesson-type-${mi}-${li}`} value={les.content_type} onValueChange={(v) => updateLesson(mi, li, { content_type: v })}>
@@ -141,7 +141,7 @@ export default function AdminCourses() {
                                                 <SelectItem value="text">Texto</SelectItem>
                                             </SelectContent>
                                         </Select>
-                                        <button data-testid={`admin-lesson-remove-${mi}-${li}`} onClick={() => removeLesson(mi, li)} className="p-2 text-[#0F172A]/40 hover:text-red-600" aria-label="Remover aula">
+                                        <button data-testid={`admin-lesson-remove-${mi}-${li}`} onClick={() => removeLesson(mi, li)} className="p-2 text-white/40 hover:text-red-500" aria-label="Remover aula">
                                             <Trash2 className="h-4 w-4" />
                                         </button>
                                     </div>
@@ -176,7 +176,7 @@ export default function AdminCourses() {
                     </div>
                 ))}
                 {modules.length === 0 && (
-                    <p className="border border-[#0A192F]/10 bg-white p-8 text-sm text-[#0F172A]/55">
+                    <p className="rounded-2xl border border-white/10 bg-[#0A1220] p-8 text-sm text-white/55">
                         Este curso ainda não tem módulos. Comece adicionando o primeiro.
                     </p>
                 )}

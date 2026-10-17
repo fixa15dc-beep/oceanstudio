@@ -27,7 +27,7 @@ export default function Navbar({ discordUrl }) {
     };
 
     return (
-        <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#0A192F]/90 backdrop-blur-xl">
+        <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#050B18]/85 backdrop-blur-xl">
             <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:px-8">
                 <Link to="/" data-testid="nav-logo" className="shrink-0">
                     <WaveLogo />
@@ -36,24 +36,31 @@ export default function Navbar({ discordUrl }) {
                 <nav className="hidden items-center gap-8 md:flex">
                     <button
                         data-testid="nav-vitrine"
-                        onClick={() => goSection("vitrine")}
-                        className="text-[13px] font-medium uppercase tracking-[0.18em] text-white/70 transition-colors hover:text-white"
+                        onClick={() => goSection("catalogo")}
+                        className="text-sm font-medium text-white/70 transition-colors hover:text-white"
                     >
-                        Cursos e Packs
+                        Catálogo
+                    </button>
+                    <button
+                        data-testid="nav-carros"
+                        onClick={() => goSection("carros")}
+                        className="text-sm font-medium text-white/70 transition-colors hover:text-white"
+                    >
+                        Carros
                     </button>
                     <button
                         data-testid="nav-sobre"
                         onClick={() => goSection("sobre")}
-                        className="text-[13px] font-medium uppercase tracking-[0.18em] text-white/70 transition-colors hover:text-white"
+                        className="text-sm font-medium text-white/70 transition-colors hover:text-white"
                     >
-                        Sobre
+                        Facs
                     </button>
                     <a
                         data-testid="nav-discord"
                         href={discord}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-[13px] font-medium uppercase tracking-[0.18em] text-white/70 transition-colors hover:text-white"
+                        className="text-sm font-medium text-white/70 transition-colors hover:text-white"
                     >
                         Discord
                     </a>
@@ -61,7 +68,7 @@ export default function Navbar({ discordUrl }) {
                         <Link
                             data-testid="nav-profile-link"
                             to={user.role === "admin" ? "/admin" : "/perfil"}
-                            className="inline-flex items-center gap-2 rounded-full border border-white/25 px-5 py-2 text-[13px] font-medium uppercase tracking-[0.14em] text-white transition-colors hover:bg-white/10"
+                            className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2 text-sm font-semibold text-[#050B18] transition-transform hover:scale-[1.03]"
                         >
                             <User className="h-3.5 w-3.5" />
                             {user.role === "admin" ? "Painel" : "Meu Perfil"}
@@ -70,7 +77,7 @@ export default function Navbar({ discordUrl }) {
                         <Link
                             data-testid="nav-entrar"
                             to="/entrar"
-                            className="rounded-full bg-white px-5 py-2 text-[13px] font-semibold uppercase tracking-[0.14em] text-[#0A192F] transition-transform hover:scale-[1.03]"
+                            className="rounded-full bg-white px-5 py-2 text-sm font-semibold text-[#050B18] transition-transform hover:scale-[1.03]"
                         >
                             Entrar
                         </Link>
@@ -88,37 +95,44 @@ export default function Navbar({ discordUrl }) {
             </div>
 
             {open && (
-                <div className="border-t border-white/10 bg-[#0A192F] px-5 pb-6 pt-2 md:hidden">
+                <div className="border-t border-white/10 bg-[#050B18] px-5 pb-6 pt-2 md:hidden">
                     <div className="flex flex-col gap-1">
                         <button
                             data-testid="nav-mobile-vitrine"
-                            onClick={() => goSection("vitrine")}
-                            className="rounded px-2 py-3 text-left text-sm uppercase tracking-[0.18em] text-white/80"
+                            onClick={() => goSection("catalogo")}
+                            className="rounded px-2 py-3 text-left text-sm text-white/80"
                         >
-                            Cursos e Packs
+                            Catálogo
+                        </button>
+                        <button
+                            data-testid="nav-mobile-carros"
+                            onClick={() => goSection("carros")}
+                            className="rounded px-2 py-3 text-left text-sm text-white/80"
+                        >
+                            Carros
                         </button>
                         <button
                             data-testid="nav-mobile-sobre"
                             onClick={() => goSection("sobre")}
-                            className="rounded px-2 py-3 text-left text-sm uppercase tracking-[0.18em] text-white/80"
+                            className="rounded px-2 py-3 text-left text-sm text-white/80"
                         >
-                            Sobre
+                            Facs
                         </button>
                         {user ? (
                             <Link
                                 data-testid="nav-mobile-profile"
                                 to={user.role === "admin" ? "/admin" : "/perfil"}
                                 onClick={() => setOpen(false)}
-                                className="rounded px-2 py-3 text-left text-sm uppercase tracking-[0.18em] text-white/80"
+                                className="rounded px-2 py-3 text-left text-sm text-white/80"
                             >
-                                {user.role === "admin" ? "Painel Admin" : "Meu Perfil"}
+                                {user.role === "admin" ? "Painel" : "Meu Perfil"}
                             </Link>
                         ) : (
                             <Link
                                 data-testid="nav-mobile-entrar"
                                 to="/entrar"
                                 onClick={() => setOpen(false)}
-                                className="rounded px-2 py-3 text-left text-sm uppercase tracking-[0.18em] text-white/80"
+                                className="rounded px-2 py-3 text-left text-sm text-white/80"
                             >
                                 Entrar
                             </Link>

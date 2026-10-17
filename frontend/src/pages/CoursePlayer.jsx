@@ -30,7 +30,7 @@ export default function CoursePlayer() {
 
     if (status === "loading") {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-[#001524] text-white/60">
+            <div className="flex min-h-screen items-center justify-center bg-[#050B18] text-white/60">
                 Carregando...
             </div>
         );
@@ -38,7 +38,7 @@ export default function CoursePlayer() {
 
     if (status === "forbidden" || status === "missing") {
         return (
-            <div className="min-h-screen bg-[#001524] text-white">
+            <div className="min-h-screen bg-[#050B18] text-white">
                 <Navbar discordUrl={discordUrl} />
                 <div className="mx-auto flex max-w-xl flex-col items-center px-5 pb-32 pt-40 text-center">
                     <Lock className="h-8 w-8 text-white/40" />
@@ -67,7 +67,7 @@ export default function CoursePlayer() {
     const current = flat.find((f) => f.mi === sel.m && f.li === sel.l) || flat[0];
 
     return (
-        <div className="min-h-screen bg-[#001524] text-white">
+        <div className="min-h-screen bg-[#050B18] text-white">
             <Navbar discordUrl={discordUrl} />
 
             <div className="mx-auto max-w-7xl px-5 pb-24 pt-28 sm:px-8">
@@ -114,7 +114,7 @@ export default function CoursePlayer() {
                                                 allowFullScreen
                                             />
                                         ) : (
-                                            <div className="absolute inset-0 overflow-auto border border-white/10 bg-[#0A192F] p-8 sm:p-10">
+                                            <div className="absolute inset-0 overflow-auto border border-white/10 bg-[#0A1220] p-8 sm:p-10">
                                                 <h2 className="font-display text-2xl font-semibold" data-testid="course-text-lesson-title">
                                                     {current.les.title}
                                                 </h2>
@@ -144,7 +144,7 @@ export default function CoursePlayer() {
                         </div>
 
                         {/* PLAYLIST */}
-                        <aside className="border border-white/10 bg-[#0A192F]">
+                        <aside className="border border-white/10 bg-[#0A1220]">
                             <div className="playlist-scroll max-h-[70vh] overflow-auto p-6">
                                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/45">
                                     Conteúdo do curso

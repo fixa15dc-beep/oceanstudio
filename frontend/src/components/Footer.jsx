@@ -1,19 +1,19 @@
 import { Link } from "react-router-dom";
-import { WaveMark, WaveLogo } from "./WaveLogo";
+import { WaveIcon, WaveLogo } from "./WaveLogo";
 
 export default function Footer({ discordUrl }) {
     const year = new Date().getFullYear();
     return (
-        <footer className="bg-[#001524] text-white">
+        <footer className="border-t border-white/5 bg-[#020617] text-white">
             <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8">
                 <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
                     <div className="max-w-sm">
                         <WaveLogo />
-                        <p className="mt-4 text-sm font-light leading-relaxed text-white/60">
+                        <p className="mt-4 text-sm font-light leading-relaxed text-white/55">
                             Curso de HL, packs de carros e roupas para FiveM GTA RP.
-                            Sua gameplay em destaque.
+                            Identidade para a sua fac.
                         </p>
-                        <WaveMark className="mt-6 h-8 w-auto text-white/20" />
+                        <WaveIcon className="mt-6 h-8 w-8 text-white/20" />
                     </div>
                     <div className="flex gap-16">
                         <div>

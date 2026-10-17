@@ -69,16 +69,16 @@ export default function AdminProducts() {
     return (
         <div data-testid="admin-products-panel">
             <div className="flex items-center justify-between">
-                <h2 className="font-display text-2xl font-semibold text-[#0A192F]">Produtos da vitrine</h2>
-                <Button data-testid="admin-product-new" onClick={openNew} className="rounded-none bg-[#0A192F] text-xs uppercase tracking-[0.14em] hover:bg-[#0A192F]/90">
+                <h2 className="font-display text-2xl font-bold text-white">Produtos da vitrine</h2>
+                <Button data-testid="admin-product-new" onClick={openNew} className="rounded-full bg-white text-xs uppercase tracking-[0.14em] text-[#050B18] hover:bg-white/90">
                     <Plus className="mr-2 h-4 w-4" /> Novo produto
                 </Button>
             </div>
 
-            <div className="mt-6 overflow-x-auto border border-[#0A192F]/10 bg-white">
+            <div className="mt-6 overflow-x-auto rounded-2xl border border-white/10 bg-[#0A1220]">
                 <table className="w-full text-sm" data-testid="admin-products-table">
                     <thead>
-                        <tr className="border-b border-[#0A192F]/10 text-left text-[11px] uppercase tracking-[0.16em] text-[#0F172A]/45">
+                        <tr className="border-b border-white/10 text-left text-[11px] uppercase tracking-[0.16em] text-white/40">
                             <th className="px-4 py-3 font-semibold">Produto</th>
                             <th className="px-4 py-3 font-semibold">Categoria</th>
                             <th className="px-4 py-3 font-semibold">Tipo</th>
@@ -90,18 +90,18 @@ export default function AdminProducts() {
                     </thead>
                     <tbody>
                         {products.map((p) => (
-                            <tr key={p.id} className="border-b border-[#0A192F]/5 last:border-0">
-                                <td className="px-4 py-3 font-medium text-[#0A192F]">{p.name}</td>
-                                <td className="px-4 py-3">{CATEGORY_LABEL[p.category] || p.category}</td>
-                                <td className="px-4 py-3">{TYPE_LABEL[p.type] || p.type}</td>
-                                <td className="px-4 py-3">{formatPrice(p.price)}</td>
-                                <td className="px-4 py-3">{p.featured ? "Sim" : "—"}</td>
-                                <td className="px-4 py-3">{p.active ? "Sim" : "Não"}</td>
+                            <tr key={p.id} className="border-b border-white/5 last:border-0">
+                                <td className="px-4 py-3 font-medium text-white">{p.name}</td>
+                                <td className="px-4 py-3 text-white/70">{CATEGORY_LABEL[p.category] || p.category}</td>
+                                <td className="px-4 py-3 text-white/70">{TYPE_LABEL[p.type] || p.type}</td>
+                                <td className="px-4 py-3 text-white/70">{formatPrice(p.price)}</td>
+                                <td className="px-4 py-3 text-white/70">{p.featured ? "Sim" : "—"}</td>
+                                <td className="px-4 py-3 text-white/70">{p.active ? "Sim" : "Não"}</td>
                                 <td className="px-4 py-3 text-right">
-                                    <button data-testid={`admin-product-edit-${p.id}`} onClick={() => openEdit(p)} className="p-2 text-[#0F172A]/50 hover:text-[#007AFF]" aria-label="Editar">
+                                    <button data-testid={`admin-product-edit-${p.id}`} onClick={() => openEdit(p)} className="p-2 text-white/50 hover:text-[#007AFF]" aria-label="Editar">
                                         <Pencil className="h-4 w-4" />
                                     </button>
-                                    <button data-testid={`admin-product-delete-${p.id}`} onClick={() => remove(p)} className="p-2 text-[#0F172A]/50 hover:text-red-600" aria-label="Remover">
+                                    <button data-testid={`admin-product-delete-${p.id}`} onClick={() => remove(p)} className="p-2 text-white/50 hover:text-red-500" aria-label="Remover">
                                         <Trash2 className="h-4 w-4" />
                                     </button>
                                 </td>
@@ -109,7 +109,7 @@ export default function AdminProducts() {
                         ))}
                         {products.length === 0 && (
                             <tr>
-                                <td colSpan={7} className="px-4 py-10 text-center text-[#0F172A]/45">
+                                <td colSpan={7} className="px-4 py-10 text-center text-white/45">
                                     Nenhum produto ainda. Crie o primeiro.
                                 </td>
                             </tr>
@@ -119,9 +119,9 @@ export default function AdminProducts() {
             </div>
 
             <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
-                <DialogContent className="max-h-[85vh] overflow-auto rounded-none sm:max-w-lg" data-testid="admin-product-dialog">
+                <DialogContent className="max-h-[85vh] overflow-auto rounded-2xl border-white/10 sm:max-w-lg" data-testid="admin-product-dialog">
                     <DialogHeader>
-                        <DialogTitle className="font-display text-2xl text-[#0A192F]">
+                        <DialogTitle className="font-display text-2xl text-white">
                             {editing === "new" ? "Novo produto" : "Editar produto"}
                         </DialogTitle>
                     </DialogHeader>
@@ -168,19 +168,19 @@ export default function AdminProducts() {
                             </div>
                         </div>
                         <div className="flex gap-10 pt-2">
-                            <label className="flex items-center gap-3 text-sm">
+                            <label className="flex items-center gap-3 text-sm text-white/80">
                                 <Switch data-testid="admin-product-featured" checked={form.featured} onCheckedChange={(v) => setForm({ ...form, featured: v })} />
                                 Destaque
                             </label>
-                            <label className="flex items-center gap-3 text-sm">
+                            <label className="flex items-center gap-3 text-sm text-white/80">
                                 <Switch data-testid="admin-product-active" checked={form.active} onCheckedChange={(v) => setForm({ ...form, active: v })} />
                                 Ativo na vitrine
                             </label>
                         </div>
                     </div>
                     <DialogFooter>
-                        <Button variant="outline" className="rounded-none" onClick={() => setEditing(null)}>Cancelar</Button>
-                        <Button data-testid="admin-product-save" onClick={save} className="rounded-none bg-[#0A192F] text-xs uppercase tracking-[0.14em] hover:bg-[#0A192F]/90">
+                        <Button variant="outline" className="rounded-full border-white/20 bg-transparent text-white hover:bg-white/10" onClick={() => setEditing(null)}>Cancelar</Button>
+                        <Button data-testid="admin-product-save" onClick={save} className="rounded-full bg-white text-xs uppercase tracking-[0.14em] text-[#050B18] hover:bg-white/90">
                             Salvar
                         </Button>
                     </DialogFooter>

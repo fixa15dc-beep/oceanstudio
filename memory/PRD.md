@@ -17,6 +17,7 @@
 6. Conteúdo placeholder semeado no startup (5 produtos + settings), trocável pelo admin sem código.
 
 ## Arquitetura entregue (2026-10-17)
+- Redesign (2026-10-17): tema dark na identidade da foto de referência (bg #050B18, cards #0A1220 arredondados, botões pill, fontes Sora + Outfit), logo circular da onda recriada em SVG (nav, rodapé, hero "Ocean" e favicon), banner cinematográfico gerado no hero, seção Catálogo com cards Roupas/Carros/HL.
 - Backend FastAPI (server.py): auth JWT (access 60min + refresh 7d, cookies SameSite=none/secure), verificação de Origin em mutações, MongoDB (users, products, grants, settings, login_attempts), índices únicos, seed de admin + produtos placeholder.
 - Frontend React (CRA): Home (hero cinético, marquee, destaque HL, carros, roupas, como funciona, sobre/Discord), /entrar, /cadastro, /perfil, /curso/:pid, /admin (tabs Produtos, Cursos, Acessos, Configurações), ErrorBoundary, ScrollToTop, sonner toasts, data-testid em toda interação.
 

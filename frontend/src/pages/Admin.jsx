@@ -12,8 +12,8 @@ export default function Admin() {
     const { user, logout } = useAuth();
 
     return (
-        <div className="min-h-screen bg-[#F8FAFC]">
-            <header className="bg-[#0A192F] pb-10 pt-10 text-white">
+        <div className="min-h-screen bg-[#050B18]">
+            <header className="border-b border-white/5 bg-[#0A1220] pb-10 pt-10 text-white">
                 <div className="mx-auto max-w-7xl px-5 sm:px-8">
                     <div className="flex flex-wrap items-center justify-between gap-6">
                         <div className="flex items-center gap-5">
@@ -50,7 +50,7 @@ export default function Admin() {
 
             <main className="mx-auto max-w-7xl px-5 py-10 sm:px-8">
                 <Tabs defaultValue="produtos">
-                    <TabsList className="h-auto w-full justify-start gap-1 rounded-none border-b border-[#0A192F]/10 bg-transparent p-0">
+                    <TabsList className="h-auto w-full justify-start gap-1 rounded-none border-b border-white/10 bg-transparent p-0">
                         {[
                             { v: "produtos", label: "Produtos" },
                             { v: "cursos", label: "Conteúdo dos Cursos" },
@@ -61,7 +61,7 @@ export default function Admin() {
                                 key={t.v}
                                 value={t.v}
                                 data-testid={`admin-tab-${t.v}`}
-                                className="rounded-none border-b-2 border-transparent px-5 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-[#0F172A]/50 data-[state=active]:border-[#0A192F] data-[state=active]:bg-transparent data-[state=active]:text-[#0A192F] data-[state=active]:shadow-none"
+                                className="rounded-none border-b-2 border-transparent px-5 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-white/50 data-[state=active]:border-[#007AFF] data-[state=active]:bg-transparent data-[state=active]:text-white data-[state=active]:shadow-none"
                             >
                                 {t.label}
                             </TabsTrigger>

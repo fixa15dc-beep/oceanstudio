@@ -65,12 +65,12 @@ export default function AdminAccess() {
     return (
         <div className="space-y-12" data-testid="admin-access-panel">
             {/* LIBERAR ACESSO */}
-            <section className="border border-[#0A192F]/10 bg-white p-8">
+            <section className="rounded-2xl border border-white/10 bg-[#0A1220] p-8">
                 <div className="flex items-center gap-3">
                     <KeyRound className="h-5 w-5 text-[#007AFF]" />
-                    <h2 className="font-display text-2xl font-semibold text-[#0A192F]">Setar acesso de um cliente</h2>
+                    <h2 className="font-display text-2xl font-bold text-white">Setar acesso de um cliente</h2>
                 </div>
-                <p className="mt-2 max-w-2xl text-sm font-light text-[#0F172A]/60">
+                <p className="mt-2 max-w-2xl text-sm font-light text-white/55">
                     Busque pelo e-mail da conta do cliente no site e libere exatamente o
                     curso/pack que ele comprou no Discord. Se o e-mail ainda não tiver
                     conta no site, uma conta é criada automaticamente.
@@ -91,7 +91,7 @@ export default function AdminAccess() {
                             </SelectContent>
                         </Select>
                     </div>
-                    <Button data-testid="admin-grant-submit" onClick={grant} disabled={busy} className="rounded-none bg-[#0A192F] px-8 text-xs uppercase tracking-[0.14em] hover:bg-[#0A192F]/90">
+                    <Button data-testid="admin-grant-submit" onClick={grant} disabled={busy} className="rounded-full bg-white px-8 text-xs uppercase tracking-[0.14em] text-[#050B18] hover:bg-white/90">
                         {busy ? "Liberando..." : "Liberar acesso"}
                     </Button>
                 </div>
@@ -99,11 +99,11 @@ export default function AdminAccess() {
 
             {/* ACESSOS ATIVOS */}
             <section>
-                <h2 className="font-display text-2xl font-semibold text-[#0A192F]">Acessos liberados</h2>
-                <div className="mt-6 overflow-x-auto border border-[#0A192F]/10 bg-white">
+                <h2 className="font-display text-2xl font-bold text-white">Acessos liberados</h2>
+                <div className="mt-6 overflow-x-auto rounded-2xl border border-white/10 bg-[#0A1220]">
                     <table className="w-full text-sm" data-testid="admin-grants-table">
                         <thead>
-                            <tr className="border-b border-[#0A192F]/10 text-left text-[11px] uppercase tracking-[0.16em] text-[#0F172A]/45">
+                            <tr className="border-b border-white/10 text-left text-[11px] uppercase tracking-[0.16em] text-white/40">
                                 <th className="px-4 py-3 font-semibold">Cliente</th>
                                 <th className="px-4 py-3 font-semibold">Produto</th>
                                 <th className="px-4 py-3 font-semibold">Liberado em</th>
@@ -112,14 +112,14 @@ export default function AdminAccess() {
                         </thead>
                         <tbody>
                             {grants.map((g) => (
-                                <tr key={g.id} className="border-b border-[#0A192F]/5 last:border-0">
-                                    <td className="px-4 py-3 font-medium text-[#0A192F]">{g.email}</td>
-                                    <td className="px-4 py-3">{g.product_name}</td>
-                                    <td className="px-4 py-3 text-[#0F172A]/55">
+                                <tr key={g.id} className="border-b border-white/5 last:border-0">
+                                    <td className="px-4 py-3 font-medium text-white">{g.email}</td>
+                                    <td className="px-4 py-3 text-white/70">{g.product_name}</td>
+                                    <td className="px-4 py-3 text-white/55">
                                         {g.granted_at ? new Date(g.granted_at).toLocaleDateString("pt-BR") : "—"}
                                     </td>
                                     <td className="px-4 py-3 text-right">
-                                        <button data-testid={`admin-grant-remove-${g.id}`} onClick={() => revoke(g)} className="p-2 text-[#0F172A]/50 hover:text-red-600" aria-label="Remover acesso">
+                                        <button data-testid={`admin-grant-remove-${g.id}`} onClick={() => revoke(g)} className="p-2 text-white/50 hover:text-red-500" aria-label="Remover acesso">
                                             <Trash2 className="h-4 w-4" />
                                         </button>
                                     </td>
@@ -127,7 +127,7 @@ export default function AdminAccess() {
                             ))}
                             {grants.length === 0 && (
                                 <tr>
-                                    <td colSpan={4} className="px-4 py-10 text-center text-[#0F172A]/45">
+                                    <td colSpan={4} className="px-4 py-10 text-center text-white/45">
                                         Nenhum acesso liberado ainda.
                                     </td>
                                 </tr>
@@ -139,11 +139,11 @@ export default function AdminAccess() {
 
             {/* ALUNOS CADASTRADOS */}
             <section>
-                <h2 className="font-display text-2xl font-semibold text-[#0A192F]">Alunos cadastrados</h2>
-                <div className="mt-6 overflow-x-auto border border-[#0A192F]/10 bg-white">
+                <h2 className="font-display text-2xl font-bold text-white">Alunos cadastrados</h2>
+                <div className="mt-6 overflow-x-auto rounded-2xl border border-white/10 bg-[#0A1220]">
                     <table className="w-full text-sm" data-testid="admin-students-table">
                         <thead>
-                            <tr className="border-b border-[#0A192F]/10 text-left text-[11px] uppercase tracking-[0.16em] text-[#0F172A]/45">
+                            <tr className="border-b border-white/10 text-left text-[11px] uppercase tracking-[0.16em] text-white/40">
                                 <th className="px-4 py-3 font-semibold">Nome</th>
                                 <th className="px-4 py-3 font-semibold">E-mail</th>
                                 <th className="px-4 py-3 font-semibold">Acessos</th>
@@ -152,22 +152,22 @@ export default function AdminAccess() {
                         </thead>
                         <tbody>
                             {students.map((s) => (
-                                <tr key={s.id} className="border-b border-[#0A192F]/5 last:border-0">
-                                    <td className="px-4 py-3 font-medium text-[#0A192F]">{s.name}</td>
-                                    <td className="px-4 py-3">{s.email}</td>
-                                    <td className="px-4 py-3">
+                                <tr key={s.id} className="border-b border-white/5 last:border-0">
+                                    <td className="px-4 py-3 font-medium text-white">{s.name}</td>
+                                    <td className="px-4 py-3 text-white/70">{s.email}</td>
+                                    <td className="px-4 py-3 text-white/70">
                                         {s.grants.length > 0
                                             ? s.grants.map((g) => g.product_name).join(", ")
-                                            : <span className="text-[#0F172A]/40">Nenhum</span>}
+                                            : <span className="text-white/40">Nenhum</span>}
                                     </td>
-                                    <td className="px-4 py-3 text-[#0F172A]/55">
+                                    <td className="px-4 py-3 text-white/55">
                                         {s.created_at ? new Date(s.created_at).toLocaleDateString("pt-BR") : "—"}
                                     </td>
                                 </tr>
                             ))}
                             {students.length === 0 && (
                                 <tr>
-                                    <td colSpan={4} className="px-4 py-10 text-center text-[#0F172A]/45">
+                                    <td colSpan={4} className="px-4 py-10 text-center text-white/45">
                                         Nenhum aluno cadastrado ainda.
                                     </td>
                                 </tr>
@@ -178,29 +178,29 @@ export default function AdminAccess() {
             </section>
 
             <Dialog open={!!created} onOpenChange={(o) => !o && setCreated(null)}>
-                <DialogContent className="rounded-none sm:max-w-md" data-testid="admin-created-account-dialog">
+                <DialogContent className="rounded-2xl border-white/10 sm:max-w-md" data-testid="admin-created-account-dialog">
                     <DialogHeader>
-                        <DialogTitle className="font-display text-2xl text-[#0A192F]">Conta criada automaticamente</DialogTitle>
+                        <DialogTitle className="font-display text-2xl text-white">Conta criada automaticamente</DialogTitle>
                     </DialogHeader>
-                    <p className="text-sm font-light text-[#0F172A]/65">
+                    <p className="text-sm font-light text-white/60">
                         O cliente não tinha conta no site, então criamos uma. Passe essas
                         credenciais para ele:
                     </p>
-                    <div className="space-y-3 border border-[#0A192F]/10 bg-[#F8FAFC] p-5 text-sm">
+                    <div className="space-y-3 rounded-xl border border-white/10 bg-white/5 p-5 text-sm">
                         <p><span className="font-semibold">E-mail:</span> {created?.email}</p>
                         <div className="flex items-center justify-between gap-3">
                             <p><span className="font-semibold">Senha temporária:</span> {created?.password}</p>
                             <button
                                 data-testid="admin-copy-password"
                                 onClick={() => navigator.clipboard?.writeText(created?.password || "")}
-                                className="p-2 text-[#0F172A]/50 hover:text-[#007AFF]"
+                                className="p-2 text-white/50 hover:text-[#007AFF]"
                                 aria-label="Copiar senha"
                             >
                                 <Copy className="h-4 w-4" />
                             </button>
                         </div>
                     </div>
-                    <p className="text-xs text-[#0F172A]/45">
+                    <p className="text-xs text-white/45">
                         Anote antes de fechar — a senha não é exibida novamente.
                     </p>
                 </DialogContent>

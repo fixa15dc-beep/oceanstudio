@@ -36,7 +36,7 @@ export default function AuthPage({ mode = "login" }) {
     };
 
     return (
-        <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#0A192F] px-5 py-20">
+        <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#050B18] px-5 py-20">
             <WaveMark className="pointer-events-none absolute -left-20 -top-20 h-96 w-auto text-white/[0.04]" />
             <WaveMark className="pointer-events-none absolute -bottom-24 -right-24 h-[28rem] w-auto text-white/[0.04]" />
 
@@ -46,13 +46,13 @@ export default function AuthPage({ mode = "login" }) {
                         <WaveLogo />
                     </Link>
                 </div>
-                <div className="border border-white/10 bg-white p-8 sm:p-10">
+                <div className="rounded-2xl border border-white/10 bg-[#0A1220] p-8 sm:p-10">
                     <div className="mb-8 flex gap-2">
                         <button
                             data-testid="auth-tab-login"
                             onClick={() => navigate("/entrar")}
-                            className={`flex-1 border px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.16em] transition-colors ${
-                                isLogin ? "border-[#0A192F] bg-[#0A192F] text-white" : "border-[#0A192F]/20 text-[#0A192F]/60 hover:border-[#0A192F]"
+                            className={`flex-1 rounded-full border px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.16em] transition-colors ${
+                                isLogin ? "border-white bg-white text-[#050B18]" : "border-white/20 text-white/60 hover:border-white/50"
                             }`}
                         >
                             Entrar
@@ -60,18 +60,18 @@ export default function AuthPage({ mode = "login" }) {
                         <button
                             data-testid="auth-tab-register"
                             onClick={() => navigate("/cadastro")}
-                            className={`flex-1 border px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.16em] transition-colors ${
-                                !isLogin ? "border-[#0A192F] bg-[#0A192F] text-white" : "border-[#0A192F]/20 text-[#0A192F]/60 hover:border-[#0A192F]"
+                            className={`flex-1 rounded-full border px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.16em] transition-colors ${
+                                !isLogin ? "border-white bg-white text-[#050B18]" : "border-white/20 text-white/60 hover:border-white/50"
                             }`}
                         >
                             Criar conta
                         </button>
                     </div>
 
-                    <h1 className="font-display text-3xl font-semibold tracking-wide text-[#0A192F]">
+                    <h1 className="font-display text-3xl font-bold tracking-tight text-white">
                         {isLogin ? "Bem-vindo de volta" : "Criar sua conta"}
                     </h1>
-                    <p className="mt-2 text-sm font-light text-[#0F172A]/60">
+                    <p className="mt-2 text-sm font-light text-white/55">
                         {isLogin
                             ? "Entre para ver os cursos liberados no seu perfil."
                             : "Cadastre-se e acompanhe seus cursos da Ocean Studio aqui."}
@@ -128,7 +128,7 @@ export default function AuthPage({ mode = "login" }) {
                             type="submit"
                             data-testid="auth-submit"
                             disabled={busy}
-                            className="w-full rounded-none bg-[#0A192F] py-3 text-xs font-semibold uppercase tracking-[0.16em] hover:bg-[#0A192F]/90"
+                            className="w-full rounded-full bg-white py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#050B18] hover:bg-white/90"
                         >
                             {busy ? "Aguarde..." : isLogin ? "Entrar" : "Criar conta"}
                         </Button>
