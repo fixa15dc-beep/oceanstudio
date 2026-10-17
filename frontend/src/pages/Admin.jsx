@@ -8,12 +8,14 @@ import AdminCourses from "./admin/AdminCourses";
 import AdminAccess from "./admin/AdminAccess";
 import AdminSettings from "./admin/AdminSettings";
 import AdminFacs from "./admin/AdminFacs";
+import AdminSite from "./admin/AdminSite";
+import AdminMedia from "./admin/AdminMedia";
 
 export default function Admin() {
     const { user, logout } = useAuth();
 
     return (
-        <div className="min-h-screen bg-[#050B18]">
+        <div className="min-h-screen bg-[#06091A]">
             <header className="border-b border-white/5 bg-[#0A1220] pb-10 pt-10 text-white">
                 <div className="mx-auto max-w-7xl px-5 sm:px-8">
                     <div className="flex flex-wrap items-center justify-between gap-6">
@@ -50,12 +52,14 @@ export default function Admin() {
             </header>
 
             <main className="mx-auto max-w-7xl px-5 py-10 sm:px-8">
-                <Tabs defaultValue="produtos">
-                    <TabsList className="h-auto w-full justify-start gap-1 rounded-none border-b border-white/10 bg-transparent p-0">
+                <Tabs defaultValue="site">
+                    <TabsList className="h-auto w-full flex-wrap justify-start gap-1 rounded-none border-b border-white/10 bg-transparent p-0">
                         {[
+                            { v: "site", label: "Site" },
+                            { v: "arquivos", label: "Arquivos" },
+                            { v: "facs", label: "Facs" },
                             { v: "produtos", label: "Produtos" },
                             { v: "cursos", label: "Conteúdo dos Cursos" },
-                            { v: "facs", label: "Facs" },
                             { v: "acessos", label: "Acessos dos Clientes" },
                             { v: "config", label: "Configurações" },
                         ].map((t) => (
@@ -69,6 +73,12 @@ export default function Admin() {
                             </TabsTrigger>
                         ))}
                     </TabsList>
+                    <TabsContent value="site" className="mt-8">
+                        <AdminSite />
+                    </TabsContent>
+                    <TabsContent value="arquivos" className="mt-8">
+                        <AdminMedia />
+                    </TabsContent>
                     <TabsContent value="produtos" className="mt-8">
                         <AdminProducts />
                     </TabsContent>

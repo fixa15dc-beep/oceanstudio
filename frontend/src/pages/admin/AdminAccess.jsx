@@ -91,7 +91,7 @@ export default function AdminAccess() {
                             </SelectContent>
                         </Select>
                     </div>
-                    <Button data-testid="admin-grant-submit" onClick={grant} disabled={busy} className="rounded-full bg-white px-8 text-xs uppercase tracking-[0.14em] text-[#050B18] hover:bg-white/90">
+                    <Button data-testid="admin-grant-submit" onClick={grant} disabled={busy} className="rounded-full bg-white px-8 text-xs uppercase tracking-[0.14em] text-[#06091A] hover:bg-white/90">
                         {busy ? "Liberando..." : "Liberar acesso"}
                     </Button>
                 </div>

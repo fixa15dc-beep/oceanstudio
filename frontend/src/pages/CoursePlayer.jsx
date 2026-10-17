@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, Play, FileText, Lock, ArrowUpRight } from "lucide-react";
 import { API, toEmbedUrl, CATEGORY_LABEL } from "../api";
+import { assetUrl, isDirectVideo } from "../lib/media";
 import Navbar from "../components/Navbar";
 
 export default function CoursePlayer() {
@@ -30,7 +31,7 @@ export default function CoursePlayer() {
 
     if (status === "loading") {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-[#050B18] text-white/60">
+            <div className="flex min-h-screen items-center justify-center bg-[#06091A] text-white/60">
                 Carregando...
             </div>
         );
@@ -38,7 +39,7 @@ export default function CoursePlayer() {
 
     if (status === "forbidden" || status === "missing") {
         return (
-            <div className="min-h-screen bg-[#050B18] text-white">
+            <div className="min-h-screen bg-[#06091A] text-white">
                 <Navbar discordUrl={discordUrl} />
                 <div className="mx-auto flex max-w-xl flex-col items-center px-5 pb-32 pt-40 text-center">
                     <Lock className="h-8 w-8 text-white/40" />
@@ -67,7 +68,7 @@ export default function CoursePlayer() {
     const current = flat.find((f) => f.mi === sel.m && f.li === sel.l) || flat[0];
 
     return (
-        <div className="min-h-screen bg-[#050B18] text-white">
+        <div className="min-h-screen bg-[#06091A] text-white">
             <Navbar discordUrl={discordUrl} />
 
             <div className="mx-auto max-w-7xl px-5 pb-24 pt-28 sm:px-8">
@@ -104,6 +105,17 @@ export default function CoursePlayer() {
                                 <>
                                     <div className="relative aspect-video w-full bg-black" data-testid="course-player-area">
                                         {current.les.content_type === "video" ? (
+                                            isDirectVideo(current.les.video_url) ? (
+                                                <video
+                                                    key={current.les.id}
+                                                    data-testid="course-video-file"
+                                                    src={assetUrl(current.les.video_url)}
+                                                    controls
+                                                    playsInline
+                                                    preload="metadata"
+                                                    className="absolute inset-0 h-full w-full"
+                                                />
+                                            ) : (
                                             <iframe
                                                 key={current.les.id}
                                                 data-testid="course-video-frame"
@@ -113,6 +125,7 @@ export default function CoursePlayer() {
                                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                                 allowFullScreen
                                             />
+                                            )
                                         ) : (
                                             <div className="absolute inset-0 overflow-auto border border-white/10 bg-[#0A1220] p-8 sm:p-10">
                                                 <h2 className="font-display text-2xl font-semibold" data-testid="course-text-lesson-title">

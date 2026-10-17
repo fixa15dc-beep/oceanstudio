@@ -1,5 +1,6 @@
 import { ArrowUpRight } from "lucide-react";
 import { formatPrice, CATEGORY_LABEL, TYPE_LABEL } from "../api";
+import { assetUrl } from "../lib/media";
 
 export default function ProductCard({ product, discordUrl }) {
     const p = product;
@@ -11,7 +12,7 @@ export default function ProductCard({ product, discordUrl }) {
             <div className="relative aspect-[4/3] overflow-hidden bg-white/5">
                 {p.image_url ? (
                     <img
-                        src={p.image_url}
+                        src={assetUrl(p.image_url)}
                         alt={p.name}
                         loading="lazy"
                         className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"

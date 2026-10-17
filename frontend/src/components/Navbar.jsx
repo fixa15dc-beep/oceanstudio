@@ -1,63 +1,68 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { WaveLogo } from "./WaveLogo";
 import { useAuth } from "../context/AuthContext";
+import { useSite } from "../context/SiteContext";
+import { scrollToSection } from "../lib/media";
 
 export default function Navbar() {
     const [open, setOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
     const { pathname } = useLocation();
     const navigate = useNavigate();
     const { user } = useAuth();
+    const { site } = useSite();
+    const items = site?.nav || [];
+
+    useEffect(() => {
+        const onScroll = () => setScrolled(window.scrollY > 24);
+        onScroll();
+        window.addEventListener("scroll", onScroll, { passive: true });
+        return () => window.removeEventListener("scroll", onScroll);
+    }, []);
 
     const goSection = (id) => {
         setOpen(false);
         if (pathname !== "/") {
             navigate("/");
-            setTimeout(
-                () => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }),
-                120
-            );
+            setTimeout(() => scrollToSection(id), 250);
         } else {
-            document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+            scrollToSection(id);
         }
     };
 
+    const panelTo = user?.role === "student" ? "/perfil" : user ? "/admin" : "/entrar";
+    const panelLabel = user?.role === "student" ? "Meu perfil" : user ? "Painel" : "Entrar";
+
     return (
-        <header className="fixed inset-x-0 top-0 z-50 border-b border-white/5 bg-[#050B18]/90 backdrop-blur-xl">
-            <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:px-8">
+        <header
+            className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${
+                scrolled || open ? "bg-[#06091A]/85 backdrop-blur-xl" : "bg-transparent"
+            }`}
+        >
+            <div className="mx-auto flex h-[72px] max-w-[1400px] items-center justify-between px-6 sm:px-10">
                 <Link to="/" data-testid="nav-logo" className="shrink-0">
                     <WaveLogo />
                 </Link>
 
-                <nav className="hidden items-center gap-8 md:flex">
-                    <button
-                        data-testid="nav-catalogo"
-                        onClick={() => goSection("catalogo")}
-                        className="text-sm text-white/75 transition-colors hover:text-white"
-                    >
-                        Catálogo
-                    </button>
-                    <button
-                        data-testid="nav-carros"
-                        onClick={() => goSection("carros")}
-                        className="text-sm text-white/75 transition-colors hover:text-white"
-                    >
-                        Carros
-                    </button>
-                    <button
-                        data-testid="nav-facs"
-                        onClick={() => goSection("facs")}
-                        className="text-sm text-white/75 transition-colors hover:text-white"
-                    >
-                        Facs
-                    </button>
+                <nav className="hidden items-center gap-9 md:flex">
+                    {items.map((it) => (
+                        <button
+                            key={it.target}
+                            data-testid={`nav-${it.target}`}
+                            onClick={() => goSection(it.target)}
+                            className="nav-link text-[13px] text-white/60 transition-colors hover:text-white"
+                        >
+                            {it.label}
+                        </button>
+                    ))}
                     <Link
                         data-testid="nav-painel"
-                        to={user?.role === "student" ? "/perfil" : "/admin"}
-                        className="rounded-full bg-white px-5 py-2 text-sm font-medium text-[#050B18] transition-transform hover:scale-[1.03]"
+                        to={panelTo}
+                        className="rounded-full border border-white/20 px-5 py-2 text-[13px] text-white transition-colors hover:border-white hover:bg-white hover:text-[#06091A]"
                     >
-                        {user?.role === "student" ? "Meu Perfil" : "Painel"}
+                        {panelLabel}
                     </Link>
                 </nav>
 
@@ -67,41 +72,25 @@ export default function Navbar() {
                     onClick={() => setOpen((v) => !v)}
                     aria-label="Abrir menu"
                 >
-                    {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                    {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
                 </button>
             </div>
 
             {open && (
-                <div className="border-t border-white/5 bg-[#050B18] px-5 pb-6 pt-2 md:hidden">
-                    <div className="flex flex-col gap-1">
-                        <button
-                            data-testid="nav-mobile-catalogo"
-                            onClick={() => goSection("catalogo")}
-                            className="rounded px-2 py-3 text-left text-sm text-white/80"
-                        >
-                            Catálogo
-                        </button>
-                        <button
-                            data-testid="nav-mobile-carros"
-                            onClick={() => goSection("carros")}
-                            className="rounded px-2 py-3 text-left text-sm text-white/80"
-                        >
-                            Carros
-                        </button>
-                        <button
-                            data-testid="nav-mobile-facs"
-                            onClick={() => goSection("facs")}
-                            className="rounded px-2 py-3 text-left text-sm text-white/80"
-                        >
-                            Facs
-                        </button>
-                        <Link
-                            data-testid="nav-mobile-painel"
-                            to={user?.role === "student" ? "/perfil" : "/admin"}
-                            onClick={() => setOpen(false)}
-                            className="rounded px-2 py-3 text-left text-sm text-white/80"
-                        >
-                            {user?.role === "student" ? "Meu Perfil" : "Painel"}
+                <div className="border-t border-white/5 px-6 pb-8 pt-3 md:hidden">
+                    <div className="flex flex-col">
+                        {items.map((it) => (
+                            <button
+                                key={it.target}
+                                data-testid={`nav-mobile-${it.target}`}
+                                onClick={() => goSection(it.target)}
+                                className="border-b border-white/5 py-4 text-left text-base text-white/80"
+                            >
+                                {it.label}
+                            </button>
+                        ))}
+                        <Link data-testid="nav-mobile-painel" to={panelTo} onClick={() => setOpen(false)} className="py-4 text-left text-base text-white">
+                            {panelLabel}
                         </Link>
                     </div>
                 </div>

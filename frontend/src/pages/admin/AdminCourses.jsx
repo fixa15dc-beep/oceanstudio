@@ -9,6 +9,7 @@ import {
     Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { API, apiError } from "../../api";
+import { MediaField } from "../../components/Uploader";
 
 export default function AdminCourses() {
     const [cursos, setCursos] = useState([]);
@@ -99,7 +100,7 @@ export default function AdminCourses() {
                     <Button variant="outline" data-testid="admin-module-add" onClick={addModule} className="rounded-full border-white/20 bg-transparent text-xs uppercase tracking-[0.14em] text-white hover:bg-white/10">
                         <Plus className="mr-2 h-4 w-4" /> Módulo
                     </Button>
-                    <Button data-testid="admin-course-save" onClick={save} disabled={busy} className="rounded-full bg-white text-xs uppercase tracking-[0.14em] text-[#050B18] hover:bg-white/90">
+                    <Button data-testid="admin-course-save" onClick={save} disabled={busy} className="rounded-full bg-white text-xs uppercase tracking-[0.14em] text-[#06091A] hover:bg-white/90">
                         <Save className="mr-2 h-4 w-4" /> {busy ? "Salvando..." : "Salvar conteúdo"}
                     </Button>
                 </div>
@@ -147,12 +148,13 @@ export default function AdminCourses() {
                                     </div>
                                     {les.content_type === "video" ? (
                                         <div className="space-y-1.5">
-                                            <Label className="text-xs">Link do vídeo (YouTube, Vimeo...)</Label>
-                                            <Input
-                                                data-testid={`admin-lesson-video-${mi}-${li}`}
+                                            <Label className="text-xs">Vídeo (envie o arquivo ou cole link do YouTube/Vimeo)</Label>
+                                            <MediaField
+                                                testId={`admin-lesson-video-${mi}-${li}`}
+                                                accept="video"
                                                 value={les.video_url}
-                                                onChange={(e) => updateLesson(mi, li, { video_url: e.target.value })}
-                                                placeholder="https://youtube.com/watch?v=..."
+                                                onChange={(v) => updateLesson(mi, li, { video_url: v })}
+                                                placeholder="https://youtube.com/watch?v=... ou envie o arquivo"
                                             />
                                         </div>
                                     ) : (

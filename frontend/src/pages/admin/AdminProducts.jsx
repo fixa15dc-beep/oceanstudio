@@ -12,6 +12,7 @@ import {
 import {
     Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from "@/components/ui/dialog";
+import { MediaField } from "../../components/Uploader";
 import { API, apiError, formatPrice, CATEGORY_LABEL, TYPE_LABEL } from "../../api";
 
 const EMPTY = {
@@ -70,7 +71,7 @@ export default function AdminProducts() {
         <div data-testid="admin-products-panel">
             <div className="flex items-center justify-between">
                 <h2 className="font-display text-2xl font-bold text-white">Produtos da vitrine</h2>
-                <Button data-testid="admin-product-new" onClick={openNew} className="rounded-full bg-white text-xs uppercase tracking-[0.14em] text-[#050B18] hover:bg-white/90">
+                <Button data-testid="admin-product-new" onClick={openNew} className="rounded-full bg-white text-xs uppercase tracking-[0.14em] text-[#06091A] hover:bg-white/90">
                     <Plus className="mr-2 h-4 w-4" /> Novo produto
                 </Button>
             </div>
@@ -163,8 +164,8 @@ export default function AdminProducts() {
                                 </Select>
                             </div>
                             <div className="space-y-1.5">
-                                <Label>Imagem (URL)</Label>
-                                <Input data-testid="admin-product-image" value={form.image_url} onChange={(e) => setForm({ ...form, image_url: e.target.value })} placeholder="https://..." />
+                                <Label>Imagem</Label>
+                                <MediaField testId="admin-product-image" value={form.image_url} onChange={(v) => setForm({ ...form, image_url: v })} />
                             </div>
                         </div>
                         <div className="flex gap-10 pt-2">
@@ -180,7 +181,7 @@ export default function AdminProducts() {
                     </div>
                     <DialogFooter>
                         <Button variant="outline" className="rounded-full border-white/20 bg-transparent text-white hover:bg-white/10" onClick={() => setEditing(null)}>Cancelar</Button>
-                        <Button data-testid="admin-product-save" onClick={save} className="rounded-full bg-white text-xs uppercase tracking-[0.14em] text-[#050B18] hover:bg-white/90">
+                        <Button data-testid="admin-product-save" onClick={save} className="rounded-full bg-white text-xs uppercase tracking-[0.14em] text-[#06091A] hover:bg-white/90">
                             Salvar
                         </Button>
                     </DialogFooter>

@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-route
 import { Toaster } from "@/components/ui/sonner";
 import "@/App.css";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
-import Navbar from "@/components/Navbar";
+import { SiteProvider } from "@/context/SiteContext";
 import Home from "@/pages/Home";
 import AuthPage from "@/pages/AuthPage";
 import Profile from "@/pages/Profile";
@@ -65,6 +65,7 @@ function App() {
     return (
         <ErrorBoundary>
             <AuthProvider>
+                <SiteProvider>
                 <BrowserRouter>
                     <ScrollToTop />
                     <Routes>
@@ -99,6 +100,7 @@ function App() {
                     </Routes>
                 </BrowserRouter>
                 <Toaster position="bottom-center" richColors />
+                </SiteProvider>
             </AuthProvider>
         </ErrorBoundary>
     );

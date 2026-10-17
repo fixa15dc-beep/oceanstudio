@@ -4,14 +4,14 @@ import { Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { API, apiError } from "../../api";
+import { MediaListField, MediaPreview } from "../../components/Uploader";
 
 export default function AdminFacs() {
     const [facs, setFacs] = useState([]);
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
-    const [images, setImages] = useState("");
+    const [imageList, setImageList] = useState([]);
     const [busy, setBusy] = useState(false);
 
     const load = () =>
@@ -26,12 +26,11 @@ export default function AdminFacs() {
         }
         setBusy(true);
         try {
-            const imgs = images.split("\n").map((s) => s.trim()).filter(Boolean);
-            await API.post("/admin/facs", { name: name.trim(), description: description.trim(), images: imgs });
+            await API.post("/admin/facs", { name: name.trim(), description: description.trim(), images: imageList });
             toast.success("Fac publicada no site!");
             setName("");
             setDescription("");
-            setImages("");
+            setImageList([]);
             load();
         } catch (e) {
             toast.error(apiError(e));
@@ -72,16 +71,10 @@ export default function AdminFacs() {
                         <Input data-testid="admin-fac-description" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Ex.: Uniformes e carros da nova temporada" />
                     </div>
                     <div className="space-y-1.5 md:col-span-2">
-                        <Label>Fotos (um link por linha)</Label>
-                        <Textarea
-                            data-testid="admin-fac-images"
-                            rows={4}
-                            value={images}
-                            onChange={(e) => setImages(e.target.value)}
-                            placeholder={"https://.../foto1.jpg\nhttps://.../foto2.jpg"}
-                        />
+                        <Label>Fotos</Label>
+                        <MediaListField items={imageList} onChange={setImageList} testId="admin-fac-images" />
                         <p className="text-xs font-light text-white/45">
-                            A primeira foto da lista é a capa. Dica: suba as fotos no site e cole os links aqui.
+                            A primeira foto é a capa. Envie arquivos do computador ou cole links.
                         </p>
                     </div>
                 </div>
@@ -89,7 +82,7 @@ export default function AdminFacs() {
                     data-testid="admin-fac-submit"
                     onClick={create}
                     disabled={busy}
-                    className="mt-6 rounded-full bg-white px-8 text-xs uppercase tracking-[0.14em] text-[#050B18] hover:bg-white/90"
+                    className="mt-6 rounded-full bg-white px-8 text-xs uppercase tracking-[0.14em] text-[#06091A] hover:bg-white/90"
                 >
                     {busy ? "Publicando..." : "Publicar fac"}
                 </Button>
@@ -112,7 +105,7 @@ export default function AdminFacs() {
                                 <tr key={f.id} className="border-b border-white/5 last:border-0">
                                     <td className="px-4 py-3">
                                         {f.images && f.images.length > 0 ? (
-                                            <img src={f.images[0]} alt="" className="h-10 w-16 rounded object-cover" />
+                                            <MediaPreview url={f.images[0]} className="h-10 w-16" />
                                         ) : (
                                             <span className="text-white/40">—</span>
                                         )}

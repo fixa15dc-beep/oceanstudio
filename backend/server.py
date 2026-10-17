@@ -3,16 +3,20 @@ import uuid
 import jwt
 import bcrypt
 import secrets
+import mimetypes
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import List, Optional
 
 from fastapi import FastAPI, APIRouter, HTTPException, Request, Response, Depends
+from fastapi.responses import StreamingResponse
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel, Field, EmailStr
 from bson import ObjectId, errors as bson_errors
+
+from site_content import DEFAULT_SITE, merge_site
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -27,6 +31,17 @@ api_router = APIRouter(prefix="/api")
 JWT_ALGORITHM = "HS256"
 MAX_FAILED_ATTEMPTS = 5
 LOCKOUT_MINUTES = 15
+
+UPLOAD_DIR = ROOT_DIR / "uploads"
+UPLOAD_TMP_DIR = ROOT_DIR / "uploads_tmp"
+UPLOAD_DIR.mkdir(exist_ok=True)
+UPLOAD_TMP_DIR.mkdir(exist_ok=True)
+MAX_UPLOAD_BYTES = 2 * 1024 * 1024 * 1024  # 2 GB
+CHUNK_SIZE = 4 * 1024 * 1024  # 4 MB
+ALLOWED_EXT = {
+    "jpg": "image", "jpeg": "image", "png": "image", "webp": "image", "gif": "image", "avif": "image",
+    "mp4": "video", "webm": "video", "mov": "video", "m4v": "video",
+}
 
 
 def now():
@@ -191,7 +206,18 @@ class FacIn(BaseModel):
     images: List[str] = []
 
 
+class UploadInitIn(BaseModel):
+    filename: str
+    size: int = Field(gt=0)
+    content_type: str = ""
+
+
 # ---------------- Public ----------------
+
+@api_router.get("/site")
+async def get_site():
+    s = await db.settings.find_one({"key": "site"})
+    return merge_site(s.get("data") if s else None)
 
 @api_router.get("/")
 async def root():
@@ -488,6 +514,134 @@ async def admin_delete_fac(fac_id: str, request: Request, user: dict = Depends(r
     return {"ok": True}
 
 
+# ---------------- Site content (admin editable) ----------------
+
+@api_router.put("/admin/site")
+async def admin_update_site(body: dict, request: Request, user: dict = Depends(require_admin)):
+    check_origin(request)
+    data = merge_site(body)
+    await db.settings.update_one(
+        {"key": "site"}, {"$set": {"data": data, "updated_at": now()}}, upsert=True
+    )
+    return data
+
+
+@api_router.post("/admin/site/reset")
+async def admin_reset_site(request: Request, user: dict = Depends(require_admin)):
+    check_origin(request)
+    await db.settings.delete_one({"key": "site"})
+    return DEFAULT_SITE
+
+
+# ---------------- Uploads (chunked, up to 2 GB) ----------------
+
+def _ext_of(filename: str) -> str:
+    return filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
+
+
+def file_public(f: dict) -> dict:
+    return {
+        "id": f["id"],
+        "url": f["url"],
+        "name": f.get("original_name", ""),
+        "kind": f.get("kind", "image"),
+        "size": f.get("size", 0),
+        "content_type": f.get("content_type", ""),
+        "created_at": f["created_at"].isoformat() if isinstance(f.get("created_at"), datetime) else f.get("created_at"),
+    }
+
+
+@api_router.post("/admin/uploads/init")
+async def upload_init(body: UploadInitIn, request: Request, user: dict = Depends(require_admin)):
+    check_origin(request)
+    ext = _ext_of(body.filename)
+    if ext not in ALLOWED_EXT:
+        raise HTTPException(status_code=400, detail="Formato não suportado. Use JPG, PNG, WEBP, GIF, MP4, WEBM ou MOV.")
+    if body.size > MAX_UPLOAD_BYTES:
+        raise HTTPException(status_code=400, detail="Arquivo acima do limite de 2 GB.")
+    upload_id = uuid.uuid4().hex
+    total_chunks = (body.size + CHUNK_SIZE - 1) // CHUNK_SIZE
+    await db.uploads.insert_one({
+        "id": upload_id,
+        "original_name": body.filename,
+        "ext": ext,
+        "kind": ALLOWED_EXT[ext],
+        "size": body.size,
+        "content_type": body.content_type,
+        "total_chunks": total_chunks,
+        "received": [],
+        "owner": user["email"],
+        "created_at": now(),
+    })
+    (UPLOAD_TMP_DIR / upload_id).touch()
+    return {"upload_id": upload_id, "chunk_size": CHUNK_SIZE, "total_chunks": total_chunks}
+
+
+@api_router.put("/admin/uploads/{upload_id}/chunk/{index}")
+async def upload_chunk(upload_id: str, index: int, request: Request, user: dict = Depends(require_admin)):
+    check_origin(request)
+    up = await db.uploads.find_one({"id": upload_id})
+    if not up:
+        raise HTTPException(status_code=404, detail="Upload não encontrado")
+    if index < 0 or index >= up["total_chunks"]:
+        raise HTTPException(status_code=400, detail="Parte inválida")
+    data = await request.body()
+    if len(data) > CHUNK_SIZE:
+        raise HTTPException(status_code=400, detail="Parte maior que o permitido")
+    path = UPLOAD_TMP_DIR / upload_id
+    with open(path, "r+b") as fh:
+        fh.seek(index * CHUNK_SIZE)
+        fh.write(data)
+    await db.uploads.update_one({"id": upload_id}, {"$addToSet": {"received": index}})
+    return {"ok": True, "index": index}
+
+
+@api_router.post("/admin/uploads/{upload_id}/complete")
+async def upload_complete(upload_id: str, request: Request, user: dict = Depends(require_admin)):
+    check_origin(request)
+    up = await db.uploads.find_one({"id": upload_id})
+    if not up:
+        raise HTTPException(status_code=404, detail="Upload não encontrado")
+    if len(up.get("received", [])) < up["total_chunks"]:
+        raise HTTPException(status_code=400, detail="Faltam partes do arquivo. Tente enviar novamente.")
+    tmp = UPLOAD_TMP_DIR / upload_id
+    if not tmp.exists() or tmp.stat().st_size != up["size"]:
+        raise HTTPException(status_code=400, detail="Arquivo incompleto. Tente enviar novamente.")
+    final_name = f"{upload_id}.{up['ext']}"
+    tmp.rename(UPLOAD_DIR / final_name)
+    doc = {
+        "id": upload_id,
+        "url": f"/api/uploads/{final_name}",
+        "original_name": up["original_name"],
+        "kind": up["kind"],
+        "size": up["size"],
+        "content_type": up["content_type"],
+        "owner": user["email"],
+        "created_at": now(),
+    }
+    await db.files.insert_one(doc)
+    await db.uploads.delete_one({"id": upload_id})
+    return file_public(doc)
+
+
+@api_router.get("/admin/uploads")
+async def list_uploads(_: dict = Depends(require_admin)):
+    docs = await db.files.find({}).sort("created_at", -1).to_list(500)
+    return [file_public(d) for d in docs]
+
+
+@api_router.delete("/admin/uploads/{file_id}")
+async def delete_upload(file_id: str, request: Request, user: dict = Depends(require_admin)):
+    check_origin(request)
+    f = await db.files.find_one({"id": file_id})
+    if f:
+        p = UPLOAD_DIR / f["url"].rsplit("/", 1)[-1]
+        if p.exists():
+            p.unlink()
+        await db.files.delete_one({"id": file_id})
+    return {"ok": True}
+
+
 # ---------------- Seed ----------------
 
 async def seed_admin():
@@ -625,6 +779,54 @@ async def shutdown_db_client():
 
 
 app.include_router(api_router)
+
+
+@app.get("/api/uploads/{name}")
+async def serve_upload(name: str, request: Request):
+    """Serve uploaded media with HTTP Range support (video seeking)."""
+    if "/" in name or name.startswith("."):
+        raise HTTPException(status_code=404)
+    path = UPLOAD_DIR / name
+    if not path.is_file():
+        raise HTTPException(status_code=404, detail="Arquivo não encontrado")
+    file_size = path.stat().st_size
+    media_type = mimetypes.guess_type(name)[0] or "application/octet-stream"
+    start, end = 0, file_size - 1
+    status = 200
+    range_header = request.headers.get("range")
+    if range_header and range_header.startswith("bytes="):
+        spec = range_header[6:].split(",")[0].strip()
+        s, _, e = spec.partition("-")
+        if s:
+            start = int(s)
+            end = int(e) if e else file_size - 1
+        elif e:
+            start = max(file_size - int(e), 0)
+        end = min(end, file_size - 1)
+        if start > end or start >= file_size:
+            raise HTTPException(status_code=416, detail="Range inválido")
+        status = 206
+    length = end - start + 1
+
+    def iterator(chunk=1024 * 1024):
+        with open(path, "rb") as fh:
+            fh.seek(start)
+            remaining = length
+            while remaining > 0:
+                data = fh.read(min(chunk, remaining))
+                if not data:
+                    break
+                remaining -= len(data)
+                yield data
+
+    headers = {
+        "Accept-Ranges": "bytes",
+        "Content-Length": str(length),
+        "Cache-Control": "public, max-age=31536000, immutable",
+    }
+    if status == 206:
+        headers["Content-Range"] = f"bytes {start}-{end}/{file_size}"
+    return StreamingResponse(iterator(), status_code=status, media_type=media_type, headers=headers)
 
 app.add_middleware(
     CORSMiddleware,

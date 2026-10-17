@@ -46,7 +46,7 @@ export default function AdminSettings() {
                     data-testid="admin-settings-save"
                     onClick={save}
                     disabled={busy}
-                    className="mt-4 rounded-full bg-white px-8 text-xs uppercase tracking-[0.14em] text-[#050B18] hover:bg-white/90"
+                    className="mt-4 rounded-full bg-white px-8 text-xs uppercase tracking-[0.14em] text-[#06091A] hover:bg-white/90"
                 >
                     <Save className="mr-2 h-4 w-4" /> {busy ? "Salvando..." : "Salvar"}
                 </Button>
