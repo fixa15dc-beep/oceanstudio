@@ -1,0 +1,106 @@
+{
+  "theme": "light",
+  "archetype": "LUXURY_AND_SWISS_HYBRID",
+  "colors": {
+    "primary_navy": "#0A192F",
+    "secondary_navy": "#001524",
+    "accent_blue": "#007AFF",
+    "white": "#FFFFFF",
+    "off_white": "#F8FAFC",
+    "text_dark": "#0F172A",
+    "text_light": "#F1F5F9",
+    "discord_purple": "#5865F2"
+  },
+  "typography": {
+    "headings": {
+      "family": "Playfair Display",
+      "style": "serif",
+      "weight": "font-bold",
+      "tracking": "tracking-wide md:tracking-wider",
+      "notes": "Generous letter spacing, elegant editorial feel. Used for H1, H2, H3."
+    },
+    "body": {
+      "family": "Outfit",
+      "style": "sans-serif",
+      "weight": "font-light to font-normal",
+      "tracking": "tracking-normal",
+      "notes": "Clean, highly legible body font for contrast with the serif headers."
+    }
+  },
+  "visual_enhancers": {
+    "borders": "1px solid border-navy/10 or border-white/10 depending on background",
+    "shadows": "Very subtle ambient shadows, shadow-[0_8px_32px_rgba(10,25,47,0.08)]",
+    "radius": "rounded-none or max rounded-sm (2px) to keep the 'bem limpinho' editorial look",
+    "textures": "Minimal. Deep solid navy blue and pure white fields.",
+    "wave_motif": "Use a minimal SVG wave for the logo and section transitions."
+  },
+  "layouts": {
+    "marketing_page": "Generous padding (py-24 to py-32). Content is not constrained to standard containers; mix centered editorial text with full-width image bands and bento grids for products.",
+    "product_grids": "Bento-style or wide editorial masonry for Car & Clothes packs. High quality images with subtle zoom on hover.",
+    "student_admin_area": "High-density grid layout (gap-4). Uses a sidebar for navigation (Courses, Access Grants, Products). Clean Shadcn tables for CRUD operations.",
+    "course_player": "Two-column layout: 70% video player (16:9 aspect ratio) with lesson details, 30% lesson sidebar/playlist. Deep navy background for focus mode."
+  },
+  "motion": {
+    "hero": "Framer motion line-by-line text reveal for the main headline.",
+    "scroll": "Lenis smooth scrolling to give the site a premium editorial weight.",
+    "parallax": "Subtle parallax (10-15% movement) on the large product showcase images.",
+    "marquee": "react-fast-marquee used for a slow, editorial ribbon ('ocean studio • fivem • gta rp • curso de hl') with Playfair Display font.",
+    "interactions": "Hover micro-interactions: slight image scale (scale-105) and image brightness shift. Buttons: hover:bg-white/10 for dark sections."
+  },
+  "accessibility": {
+    "contrast": "Ensure white text on deep navy background passes APCA/WCAG. Text over images must have a gradient overlay (bg-gradient-to-t from-black/80 to-transparent).",
+    "focus": "focus:ring-2 focus:ring-accent_blue focus:ring-offset-2",
+    "aria": "Use aria-hidden for decorative waves and marquee."
+  },
+  "components": {
+    "button": "Pill-shaped or sharp rectangular. Primary: Deep Navy bg, White text. 'Comprar no Discord': Discord Purple bg, White text with Discord icon.",
+    "cards": "Minimalist, cardless look. Image is dominant, with text directly underneath rather than enclosed in a visible border.",
+    "navbar": "Glassmorphism (backdrop-blur-xl bg-white/70) if on white, or Solid Navy if over navy. Must have the wave logo, 'Cursos', 'Packs', 'Entrar'.",
+    "admin_tables": "Shadcn standard table. Minimalist styling."
+  },
+  "media": {
+    "image_urls": {
+      "car_packs": [
+        "https://images.unsplash.com/photo-1673170717377-93fd50d26689?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDJ8MHwxfHNlYXJjaHw0fHxzcG9ydHMlMjBjYXIlMjBuaWdodCUyMGNpdHl8ZW58MHx8fHwxNzkyMjA0OTYwfDA&ixlib=rb-4.1.0&q=85",
+        "https://images.unsplash.com/photo-1716687504751-6788a860cbfe?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDJ8MHwxfHNlYXJjaHwyfHxzcG9ydHMlMjBjYXIlMjBuaWdodCUyMGNpdHl8ZW58MHx8fHwxNzkyMjA0OTYwfDA&ixlib=rb-4.1.0&q=85",
+        "https://images.pexels.com/photos/27639784/pexels-photo-27639784.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+      ],
+      "clothes_packs": [
+        "https://images.unsplash.com/photo-1508216310976-c518daae0cdc?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzl8MHwxfHNlYXJjaHwzfHxzdHJlZXR3ZWFyJTIwaG9vZGllJTIwbWluaW1hbHxlbnwwfHx8fDE3OTIyMDQ5NjB8MA&ixlib=rb-4.1.0&q=85",
+        "https://images.pexels.com/photos/18484864/pexels-photo-18484864.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "https://images.unsplash.com/photo-1601063476271-a159c71ab0b3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzl8MHwxfHNlYXJjaHw0fHxzdHJlZXR3ZWFyJTIwaG9vZGllJTIwbWluaW1hbHxlbnwwfHx8fDE3OTIyMDQ5NjB8MA&ixlib=rb-4.1.0&q=85"
+      ],
+      "hl_course": [
+        "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2ODl8MHwxfHNlYXJjaHwxfHx2aWRlbyUyMGVkaXRpbmclMjBzb2Z0d2FyZSUyMGludGVyZmFjZXxlbnwwfHx8fDE3OTIyMDQ5NjB8MA&ixlib=rb-4.1.0&q=85",
+        "https://images.pexels.com/photos/11553189/pexels-photo-11553189.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+      ]
+    }
+  },
+  "libraries": {
+    "motion": "framer-motion, @studio-freight/react-lenis",
+    "icons": "lucide-react, react-icons",
+    "marquee": "react-fast-marquee"
+  },
+  "instructions_to_main_agent": [
+    "Use Playfair Display for headings and Outfit for body. Add them via Google Fonts in index.html.",
+    "Implement the 'Bem limpinho' editorial aesthetic: Large sections of deep solid navy (#0A192F) alternating with pure white sections (#FFFFFF).",
+    "Use generous letter-spacing on headings to achieve the editorial look.",
+    "Create a minimal SVG wave for the Ocean Studio logo and use it in the nav, footer, and favicon.",
+    "Implement line-by-line reveal animations for the main hero text using framer-motion.",
+    "Add a slow, editorial marquee using react-fast-marquee.",
+    "For the products (Car/Clothes packs), use a minimalist bento grid. Each product must have a 'Comprar no Discord' button linking out.",
+    "The Student Area and Admin Panel must use clean Shadcn components with sharp or max 2px rounded corners.",
+    "Build the Course Player with a 70/30 split layout (Video on left, Lesson list on right).",
+    "Use sonner for toast notifications.",
+    "All interactive elements MUST have data-testid attributes."
+  ],
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "Do not converge toward generic AI slop. Create depth through layered design and editorial layouts.",
+    "Never apply transition: all globally.",
+    "Never center-align the .App container.",
+    "Use 2-3x more spacing (p-16, p-24) than feels comfortable to maintain the premium editorial feel.",
+    "Never use generic placeholder images or missing text. Use the provided image URLs.",
+    "Do not use transparent backgrounds for dropdowns or headers where content scrolls underneath.",
+    "Use sonner for toast notifications."
+  ]
+}
