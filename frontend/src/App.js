@@ -9,6 +9,7 @@ import AuthPage from "@/pages/AuthPage";
 import Profile from "@/pages/Profile";
 import CoursePlayer from "@/pages/CoursePlayer";
 import Admin from "@/pages/Admin";
+import WaterCursor from "@/components/WaterCursor";
 
 class ErrorBoundary extends Component {
     constructor(props) {
@@ -66,6 +67,7 @@ function App() {
         <ErrorBoundary>
             <AuthProvider>
                 <SiteProvider>
+                <WaterCursor />
                 <BrowserRouter>
                     <ScrollToTop />
                     <Routes>
