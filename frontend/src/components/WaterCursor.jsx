@@ -1,9 +1,8 @@
 import { useEffect, useRef } from "react";
 
 /**
- * Custom blue "water" cursor:
- * - a soft glowing blue drop that trails the pointer with easing
- * - expanding ripple rings left behind wherever the pointer travels
+ * Custom blue cursor:
+ * - a soft glowing blue drop that follows the pointer with easing.
  * Disabled on touch / coarse-pointer devices (keeps native behaviour).
  */
 export default function WaterCursor() {
@@ -36,24 +35,8 @@ export default function WaterCursor() {
 
         const pointer = { x: w / 2, y: h / 2 };
         const drop = { x: w / 2, y: h / 2 };
-        let lastRippleX = pointer.x;
-        let lastRippleY = pointer.y;
         let visible = false;
         let pressed = false;
-        const ripples = [];
-
-        const addRipple = (x, y, strength = 1) => {
-            ripples.push({
-                x,
-                y,
-                r: 2,
-                maxR: 26 + Math.random() * 18 * strength,
-                life: 1,
-                decay: 0.012 + Math.random() * 0.01,
-                width: 1.4 * strength,
-            });
-            if (ripples.length > 140) ripples.shift();
-        };
 
         const onMove = (e) => {
             pointer.x = e.clientX;
@@ -62,15 +45,6 @@ export default function WaterCursor() {
                 visible = true;
                 drop.x = pointer.x;
                 drop.y = pointer.y;
-                lastRippleX = pointer.x;
-                lastRippleY = pointer.y;
-            }
-            const dx = pointer.x - lastRippleX;
-            const dy = pointer.y - lastRippleY;
-            if (dx * dx + dy * dy > 90) {
-                addRipple(pointer.x, pointer.y, 1);
-                lastRippleX = pointer.x;
-                lastRippleY = pointer.y;
             }
         };
         const onLeave = () => {
@@ -78,7 +52,6 @@ export default function WaterCursor() {
         };
         const onDown = () => {
             pressed = true;
-            addRipple(pointer.x, pointer.y, 2.4);
         };
         const onUp = () => {
             pressed = false;
@@ -92,29 +65,6 @@ export default function WaterCursor() {
         let raf;
         const render = () => {
             ctx.clearRect(0, 0, w, h);
-
-            // ripple rings (water trail)
-            for (let i = ripples.length - 1; i >= 0; i--) {
-                const rp = ripples[i];
-                rp.r += (rp.maxR - rp.r) * 0.08;
-                rp.life -= rp.decay;
-                if (rp.life <= 0) {
-                    ripples.splice(i, 1);
-                    continue;
-                }
-                const alpha = Math.max(rp.life, 0) * 0.5;
-                ctx.beginPath();
-                ctx.arc(rp.x, rp.y, rp.r, 0, Math.PI * 2);
-                ctx.strokeStyle = `rgba(56, 160, 255, ${alpha})`;
-                ctx.lineWidth = rp.width;
-                ctx.stroke();
-                // inner faint ring
-                ctx.beginPath();
-                ctx.arc(rp.x, rp.y, rp.r * 0.55, 0, Math.PI * 2);
-                ctx.strokeStyle = `rgba(120, 200, 255, ${alpha * 0.5})`;
-                ctx.lineWidth = rp.width * 0.7;
-                ctx.stroke();
-            }
 
             // easing leading drop
             drop.x += (pointer.x - drop.x) * 0.18;
