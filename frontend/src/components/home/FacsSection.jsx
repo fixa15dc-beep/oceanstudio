@@ -23,9 +23,9 @@ export default function FacsSection({ facs, items }) {
                                         <h3 className="text-2xl font-semibold tracking-tight text-white">{f.name}</h3>
                                         {f.description && <p className="mt-3 max-w-sm text-sm leading-relaxed text-white/55">{f.description}</p>}
                                     </div>
-                                    <div className="flex gap-3 overflow-x-auto pb-1 md:col-span-7">
+                                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:col-span-7" data-testid={`fac-images-${f.id}`}>
                                         {(f.images || []).map((src, j) => (
-                                            <div key={`${src}-${j}`} className={`frame shrink-0 overflow-hidden rounded-sm bg-white/5 ${j === 0 ? "h-44 w-72" : "h-44 w-44"}`}>
+                                            <div key={`${src}-${j}`} className={`frame overflow-hidden rounded-sm bg-white/5 ${j === 0 ? "h-80 sm:col-span-2" : "h-64"}`}>
                                                 <img src={assetUrl(src)} alt={f.name} className="h-full w-full object-cover transition-transform duration-[1200ms] hover:scale-[1.04]" />
                                             </div>
                                         ))}
